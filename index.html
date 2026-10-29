@@ -36,6 +36,7 @@
     @media(max-width:680px){.hero{min-height:0}.motion-canvas{opacity:.72}.hero-inner{grid-template-columns:1fr;gap:27px;padding:58px 0 35px}.hero-copy-block{max-width:590px}.motion-console{padding:17px;background:rgba(8,22,31,.64)}.motion-console-caption{display:flex}.motion-console-caption span{text-align:right;margin:0}.motion-console-controls{grid-template-columns:auto 1fr;gap:12px}.motion-toggle,.motion-mode,.actions .btn{min-height:46px}.motion-toggle{justify-self:auto;padding:0 12px}.nav-share{text-align:left;padding:9px 0}.hero-meta{gap:12px 16px}.share-toast{max-width:calc(100vw - 30px);text-align:center}}
     @media(prefers-reduced-motion:reduce){.live-dot{animation:none}.motion-canvas{opacity:.58}}
   </style>
+  <link rel="stylesheet" href="engineering-viewer.css">
 </head>
 <body>
   <header class="topbar">
@@ -43,7 +44,7 @@
       <a class="brand" href="#top" aria-label="Thathrooban Nedunchezhiyan, home"><span class="brandmark">TN</span><span>Thathrooban Nedunchezhiyan</span></a>
       <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
       <div class="navlinks">
-        <a href="#about">About</a><a href="#experience">Experience</a><a href="#mechanical-lab">Mechanical lab</a><a href="#focus">Current work</a><a href="#skills">Skills</a><a href="#education">Education</a><button class="nav-share" id="shareButton" type="button">Share ↗</button><a class="nav-cta" href="#contact">Contact</a>
+        <a href="#about">About</a><a href="#experience">Experience</a><a href="#engineering-models">Mechanical lab</a><a href="#focus">Current work</a><a href="#skills">Skills</a><a href="#education">Education</a><button class="nav-share" id="shareButton" type="button">Share ↗</button><a class="nav-cta" href="#contact">Contact</a>
       </div>
     </nav>
   </header>
@@ -82,6 +83,35 @@
       </div>
     </div></section>
 
+<section class="render-lab" id="engineering-models">
+  <div class="wrap">
+    <div class="section-head render-head"><div><p class="kicker">Offline 3D workbench</p><h2>Inspect the machine.<br>Move the assembly.</h2></div><p>Interactive, code-built mechanical studies for robotics, semiconductor process equipment and mobile automation. Drag to orbit, then separate the modules.</p></div>
+    <div class="model-tabs" role="group" aria-label="Choose a machine model">
+      <button type="button" class="model-tab is-active" data-model="arm" aria-pressed="true"><span>01</span> Robot arm</button>
+      <button type="button" class="model-tab" data-model="plasma" aria-pressed="false"><span>02</span> Plasma tool</button>
+      <button type="button" class="model-tab" data-model="amr" aria-pressed="false"><span>03</span> AMR base</button>
+    </div>
+    <div class="model-workbench">
+      <div class="model-stage" id="modelStage">
+        <canvas id="machineCanvas" tabindex="0" role="img" aria-label="Interactive conceptual 3D mechanical model. Drag to orbit; use the wheel or pinch to zoom."></canvas>
+        <div class="model-stage-top"><span><i class="model-live-dot"></i> LIVE MODEL STUDY</span><span id="modelStatus">CYCLE RUNNING</span></div>
+        <div class="model-stage-caption"><span class="model-stage-index" id="modelIndex">01 / 03</span><strong id="modelStageName">Six-axis robotic arm</strong><small id="modelStageSub">Articulated reach · joint motion</small></div>
+        <div class="model-stage-hint"><span class="hint-pointer">↔</span> Drag to orbit <b>·</b> Scroll or pinch to zoom</div>
+        <div class="model-axis-mark" aria-hidden="true"><span>X</span><span>Y</span><span>Z</span></div>
+      </div>
+      <aside class="model-panel" aria-label="Model controls and inspection">
+        <div class="model-panel-heading"><div><p class="model-overline">ENGINEERING VIEWER</p><h3 id="modelTitle">Six-axis robotic arm</h3></div><span class="model-badge" id="modelBadge">ROBOTICS</span></div>
+        <p class="model-description" id="modelDescription">A conceptual articulated arm with a cast base, servo joints, structural links, wrist and end-effector interface.</p>
+        <div class="model-control-block"><label for="modelExplode"><span>Assembly separation</span><output id="modelExplodeValue">0%</output></label><input id="modelExplode" type="range" min="0" max="100" value="0" aria-label="Separate the model assembly"></div>
+        <div class="model-control-block"><label for="modelPhase"><span id="modelPhaseLabel">Joint sweep</span><output id="modelPhaseValue">50%</output></label><input id="modelPhase" type="range" min="0" max="100" value="50" aria-label="Adjust the machine motion phase"></div>
+        <div class="model-actions"><button type="button" class="model-action model-action-primary" id="modelPlay" aria-pressed="true">Ⅱ &nbsp;Pause cycle</button><button type="button" class="model-action" id="modelReset">Reset view</button></div>
+        <div class="model-component-block"><div class="model-component-label">INSPECTION FOCUS</div><div class="model-components" id="modelComponents" role="group" aria-label="Highlight a model component"></div></div>
+        <p class="model-footnote" id="modelFootnote">Illustrative geometry for portfolio exploration. Not production CAD or a certified analysis model.</p>
+      </aside>
+    </div>
+    <div class="model-telemetry" aria-live="polite"><span><i class="telemetry-pulse"></i><b id="telemetryMode">KINEMATIC STUDY</b></span><span id="telemetryPart">Focus · complete assembly</span><span id="telemetryView">Orbit · interactive</span></div>
+  </div>
+</section>
 <section class="mech-lab" id="mechanical-lab">
   <div class="wrap">
     <div class="section-head"><div><p class="kicker">Interactive mechanical lab</p><h2>Explore the hardware.<br>Follow the load path.</h2></div><p>Illustrative mechanism views and a live statics model inspired by AMR and heavy-trolley structures.</p></div>
@@ -174,5 +204,6 @@ document.querySelectorAll('.motion-mode').forEach(b=>b.addEventListener('click',
 const toast=document.getElementById('shareToast');let toastTimer;function showToast(s){toast.textContent=s;toast.classList.add('is-visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('is-visible'),2600)}async function share(){if(!/^https?:$/.test(location.protocol)){showToast('Publish this page to get a shareable web link.');return}try{const data={title:document.title,text:'Thathrooban Nedunchezhiyan · Senior Mechanical Engineer',url:location.href};if(navigator.share)await navigator.share(data);else if(navigator.clipboard&&isSecureContext){await navigator.clipboard.writeText(location.href);showToast('Portfolio link copied.')}else window.prompt('Copy this portfolio link:',location.href)}catch(e){if(e.name!=='AbortError')showToast('Sharing is unavailable on this device.')}}
 document.querySelectorAll('[data-share],#shareButton').forEach(b=>b.addEventListener('click',share));
   </script>
+  <script src="engineering-viewer.js"></script>
 </body>
 </html>
